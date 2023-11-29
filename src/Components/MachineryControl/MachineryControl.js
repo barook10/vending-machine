@@ -1,11 +1,12 @@
-// Maintainer.js
+// MachineryControl.js
 
 import React, { useState } from 'react';
 import Drink from '../Drink/Drink';
-import Sales from '../Sales/Sales';
-import { useVendingMachine } from '../Context/VendingMachineContext';
 
-function Maintainer() {
+import { useVendingMachine } from '../Context/VendingMachineContext';
+import './MachineryControl.css'
+
+function MachineryControl() {
   const hardcodedPassword = 'admin';
   const [password, setPassword] = useState('');
   const [isPasswordCorrect, setIsPasswordCorrect] = useState(false);
@@ -47,17 +48,30 @@ function Maintainer() {
 
   const onChangePrice = (drink, newPrice) => {
     if (isPasswordCorrect) {
-      dispatch({ type: 'CHANGE_PRICE', payload: { drink, newPrice } });
+        // Check if newPrice is a valid number
+  if (!isNaN(newPrice) && newPrice >= 0) {
+    // Dispatch the 'CHANGE_PRICE' action with the correct payload
+    dispatch({ type: 'CHANGE_PRICE', payload: { drink, newPrice } });
+  } else {
+    // Handle invalid newPrice (e.g., show an error message)
+    console.error('Invalid new price:', newPrice);
+  }
     }
   };
 
+  // const onBuyDrink = (selectedDrink) => {
+  //   if (isPasswordCorrect) {
+  //     dispatch({ type: 'BUY_DRINK', payload: selectedDrink });
+  //   }
+  // };
+
   return (
-    <div>
-      <h2>Maintainer Panel</h2>
+    <div className="machinery-control-panel">
+      <h2>MachineryControl Panel</h2>
       {!isPasswordCorrect ? (
-        <div>
-          <p>Enter password to access the maintainer panel:</p>
-          <input
+        <div className='input-container'>
+          <p>Enter password to access the Machinery Control panel:</p>
+          <input 
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -70,12 +84,13 @@ function Maintainer() {
         <div>
           <div className="drink-list">
             {state.drinks.map((drink) => (
-              <div key={drink.name} className="drink-container">
-                <Drink drink={drink} onRefill={() => onRefill(drink)} onChangePrice={(newPrice) => onChangePrice(drink, newPrice)} />
-                <button onClick={() => onDeleteDrink(drink)}>Delete</button>
+              <div key={drink.name} >
+                <Drink drink={drink} onRefill={() => onRefill(drink)} onChangePrice={(newPrice) => onChangePrice(drink, newPrice)} onDeleteDrink={() => onDeleteDrink(drink)} />
+               
               </div>
             ))}
           </div>
+          <div className='input-container'>
           <h3>Add New Drink</h3>
           <input
             type="text"
@@ -102,11 +117,11 @@ function Maintainer() {
             onChange={(e) => setNewDrinkImage(e.target.value)}
           />
           <button onClick={onAddDrink}>Add Drink</button>
+          </div>
         </div>
       )}
-      <Sales drinks={state.drinks} />
     </div>
   );
 }
 
-export default Maintainer;
+export default MachineryControl;

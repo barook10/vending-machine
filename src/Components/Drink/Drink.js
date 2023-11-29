@@ -1,25 +1,65 @@
-import React from 'react';
 
-const Drink = ({ drink, onBuy, onRefill, onChangePrice, isCustomerView }) => {
-  const { name, price, quantity, image } = drink;
+import React, { useState } from 'react';
+import './Drink.css'
+
+const Drink = ({ drink, onBuy, onRefill, onChangePrice, onDeleteDrink, isCustomerView, isSalesView }) => {
+  const { name, quantity, image } = drink;
+
+  // State to manage the price
+  const [price, setPrice] = useState(drink.price);
+
+  // State to manage the new price input
+  const [newPriceInput, setNewPriceInput] = useState('');
+
+  const handlePriceChange = (e) => {
+    setNewPriceInput(e.target.value);
+  };
+
+  const handlePriceSubmit = () => {
+    const newPrice = parseFloat(newPriceInput);
+    if (!isNaN(newPrice)) {
+      setPrice(newPrice);
+      onChangePrice(newPrice);
+      setNewPriceInput(''); // Clear the input after submitting
+    } else {
+      // Handle invalid input (not a valid number)
+      alert('Please enter a valid number for the new price.');
+    }
+  };
+
+  const formattedPrice = typeof price === 'number' && isFinite(price)
+    ? `$${price.toFixed(2)}`
+    : 'Price: N/A';
 
   return (
-    <div className="drink-container">
+    <div className="drink-box">
       <img src={image} alt={name} style={{ width: '100px', height: '100px' }} />
       <h3>{name}</h3>
-      <p>Price: ${price.toFixed(2)}</p>
-      <p>Quantity: {quantity}</p>
+      <p>{formattedPrice}</p>
+
+      {isSalesView ? null : (<p>Quantity: {quantity}</p> )}
 
       {isCustomerView ? (
-        <button onClick={onBuy}>Buy</button>
+        <button  onClick={onBuy}>Buy</button>
       ) : (
         <div>
-          <button onClick={() => onRefill(drink)}>Refill</button>
-          <input
-            type="number"
-            placeholder="New Price"
-            onChange={(e) => onChangePrice(drink, parseFloat(e.target.value))}
-          />
+          {isSalesView ? null : (
+            <button onClick={() => onRefill(drink)}>Refill</button>
+          )}
+          {isSalesView ? null : (
+            <div>
+              <input className='drink-input'
+                type="number"
+                placeholder="New Price"
+                value={newPriceInput}
+                onChange={handlePriceChange}
+              />
+              <button onClick={handlePriceSubmit}>Change Price</button>
+              <br></br>
+              <br></br>
+              <button onClick={onDeleteDrink}>Delete</button>
+            </div>
+          )}
         </div>
       )}
     </div>
