@@ -3,7 +3,8 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Customer from '../Customer/Customer';
 import MachineryControl from '../MachineryControl/MachineryControl';
-import Sales from '../Sales/Sales';
+import Maintainer from '../Maintainer/Maintainer';
+import SimulatorControlPanel from '../SimulatorControlPanel/SimulatorControlPanel';
 import { VendingMachineProvider } from '../Context/VendingMachineContext';
 
 const App = () => {
@@ -12,9 +13,10 @@ const App = () => {
       <div>
         <Router>
           <Routes>
-            <Route path="/" element={<Customer />} />
+            <Route path='/' element={<SimulatorControlPanel />} />
+            <Route path="/customer" element={<Customer />} />
             <Route path="/MachineryControl" element={<MachineryControl />} />
-            <Route path="/sales" element={<Sales />} />
+            <Route path="/Maintainer" element={<Maintainer />} />
           </Routes>
         </Router>
       </div>

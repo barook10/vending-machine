@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import './Drink.css'
+import styles from './Drink.module.css';
 
 const Drink = ({ drink, onBuy, onRefill, onChangePrice, onDeleteDrink, isCustomerView, isSalesView }) => {
   const { name, quantity, image } = drink;
@@ -28,11 +28,11 @@ const Drink = ({ drink, onBuy, onRefill, onChangePrice, onDeleteDrink, isCustome
   };
 
   const formattedPrice = typeof price === 'number' && isFinite(price)
-    ? `$${price.toFixed(2)}`
+    ? `RM ${price.toFixed(2)}`
     : 'Price: N/A';
 
   return (
-    <div className="drink-box">
+    <div  className={styles['drink-box']}>
       <img src={image} alt={name} style={{ width: '100px', height: '100px' }} />
       <h3>{name}</h3>
       <p>{formattedPrice}</p>
@@ -48,7 +48,7 @@ const Drink = ({ drink, onBuy, onRefill, onChangePrice, onDeleteDrink, isCustome
           )}
           {isSalesView ? null : (
             <div>
-              <input className='drink-input'
+              <input  className={styles['drink-input']}
                 type="number"
                 placeholder="New Price"
                 value={newPriceInput}

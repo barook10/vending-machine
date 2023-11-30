@@ -1,0 +1,59 @@
+/* Global Styles for Better Responsiveness */
+body {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+  
+  /* Adjustments to .simulator-control-panel */
+  .simulator-control-panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: cyan;
+    width: 80%; /* Use percentage for responsiveness */
+    max-width: 30rem; /* Set a maximum width for larger screens */
+    padding: 20px;
+    margin: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Adjustments to .simulator-control-panel h2 */
+  .simulator-control-panel h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  /* Adjustments to .simulation */
+  .simulation {
+    width: 100%; /* Full width within the parent container */
+    max-width: 20rem; /* Maximum width to maintain responsiveness */
+    margin: 10px 0; /* Adjusted margin for better spacing */
+  }
+  
+  /* Adjustments to .simulator-control-panel a */
+  .simulator-control-panel a {
+    display: block;
+    text-align: center;
+    padding: 10px 20px;
+    margin: 40px 0; /* Adjusted margin for better spacing */
+    border: 1px solid #ccc;
+    border-radius: 30px;
+    text-decoration: none;
+    color: #333;
+    transition: background-color 0.3s ease; /* Smooth hover transition */
+    box-shadow: 1px 28px 5px -2px rgba(62,8,212,0.75);
+-webkit-box-shadow: 1px 28px 5px -2px rgba(62,8,212,0.75);
+-moz-box-shadow: 1px 28px 5px -2px rgba(62,8,212,0.75);
+  }
+  
+  /* Adjustments to .simulator-control-panel a:hover */
+  .simulator-control-panel a:hover {
+    background-color: #eee;
+    color: #000; /* Adjusted text color on hover for better visibility */
+  }
+  
