@@ -4,8 +4,8 @@ import Drink from '../Drink/Drink';
 import { Link } from 'react-router-dom';
 import styles from './Maintainer.module.css';
 
-const Sales = () => {
-  const hardcodedPassword = 'admin'; // Set your desired password
+const Maintainer = () => {
+  const hardcodedPassword = 'admin'; 
   const [password, setPassword] = useState('');
   const [isPasswordCorrect, setIsPasswordCorrect] = useState(false);
 
@@ -47,6 +47,7 @@ const Sales = () => {
           <Link to='/'>
             <button className={styles['collect-cash-button']}>End Simulation</button>
           </Link>
+
           {/* Display sales stats for each drink */}
           <ul>
             <h3 className={styles['sales-header']}>Drinks Sales Stats:</h3>
@@ -81,4 +82,4 @@ const Sales = () => {
   );
 };
 
-export default Sales;
+export default Maintainer;

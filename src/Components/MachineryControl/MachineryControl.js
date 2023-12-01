@@ -52,8 +52,8 @@ function MachineryControl() {
         // Dispatch the 'CHANGE_PRICE' action with the correct payload
         dispatch({ type: 'CHANGE_PRICE', payload: { drink, newPrice } });
       } else {
-        // Handle invalid newPrice (e.g., show an error message)
-        console.error('Invalid new price:', newPrice);
+        
+        alert('Invalid new price:', newPrice);
       }
     }
   };

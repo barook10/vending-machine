@@ -20,7 +20,7 @@ const Drink = ({ drink, onBuy, onRefill, onChangePrice, onDeleteDrink, isCustome
     if (!isNaN(newPrice)) {
       setPrice(newPrice);
       onChangePrice(newPrice);
-      setNewPriceInput(''); // Clear the input after submitting
+      setNewPriceInput(''); 
     } else {
       // Handle invalid input (not a valid number)
       alert('Please enter a valid number for the new price.');

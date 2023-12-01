@@ -18,114 +18,73 @@ const reducer = (state, action) => {
       };
 
     case "ADD_DRINK":
-      const newDrink = {
-        ...action.payload,
-        sales: 0,
-        totalSold: 0,
-        cost: 0,
-      };
-      const updatedDrinksAdd = [...state.drinks, newDrink];
-      localStorage.setItem("drinks", JSON.stringify(updatedDrinksAdd));
+      const newDrink = { ...action.payload, sales: 0, totalSold: 0, cost: 0 };
       return {
         ...state,
-        drinks: updatedDrinksAdd,
+        drinks: [...state.drinks, newDrink],
       };
 
     case "DELETE_DRINK":
-      const updatedDrinksDelete = state.drinks.filter(
-        (drink) => drink.name !== action.payload.name
-      );
       return {
         ...state,
-        drinks: updatedDrinksDelete,
+        drinks: state.drinks.filter((drink) => drink.name !== action.payload.name),
       };
 
     case "BUY_DRINK":
-      const updatedDrinksBuy = state.drinks.map((drink) =>
-        drink.name === action.payload.name
-          ? {
-              ...drink,
-              quantity: drink.quantity - 1,
-              sales: drink.sales + drink.price,
-              totalSold: drink.totalSold + 1,
-            }
-          : drink
-      );
       return {
         ...state,
-        drinks: updatedDrinksBuy,
+        drinks: state.drinks.map((drink) =>
+          drink.name === action.payload.name
+            ? {
+                ...drink,
+                quantity: drink.quantity - 1,
+                sales: drink.sales + drink.price,
+                totalSold: drink.totalSold + 1,
+              }
+            : drink
+        ),
       };
 
     case "UPDATE_STOCK":
-      return { ...state, remainingStock: action.payload };
+      const remainingStock = state.drinks.reduce((total, drink) => total + drink.quantity, 0);
+      return { ...state, remainingStock };
 
     case "REFILL_DRINK":
-      const updatedDrinksRefill = state.drinks.map((drink) =>
-        drink.name === action.payload.name
-          ? { ...drink, quantity: drink.quantity + 1 }
-          : drink
-      );
       return {
         ...state,
-        drinks: updatedDrinksRefill,
+        drinks: state.drinks.map((drink) =>
+          drink.name === action.payload.name ? { ...drink, quantity: drink.quantity + 1 } : drink
+        ),
       };
 
     case "CHANGE_PRICE":
-      const updatedDrinksChangePrice = state.drinks.map((drink) =>
-        drink.name === action.payload.drink.name
-          ? { ...drink, price: action.payload.newPrice }
-          : drink
-      );
       return {
         ...state,
-        drinks: updatedDrinksChangePrice,
+        drinks: state.drinks.map((drink) =>
+          drink.name === action.payload.drink.name ? { ...drink, price: action.payload.newPrice } : drink
+        ),
       };
 
     case "UPDATE_SALES_INFO":
       return {
         ...state,
         sales: state.sales + action.payload.sales,
-
         totalDrinksSold: state.totalDrinksSold + action.payload.totalDrinksSold,
       };
 
     case "RESET_SALES":
-      const resetSalesDrinks = state.drinks.map((drink) => ({
-        ...drink,
-        sales: 0,
-      }));
-      const resetState = {
+      const resetSalesDrinks = state.drinks.map((drink) => ({ ...drink, sales: 0 }));
+      return {
         ...state,
         drinks: resetSalesDrinks,
         sales: 0,
         totalDrinksSold: 0,
       };
 
-      // Update local storage
-      try {
-        localStorage.setItem("drinks", JSON.stringify(resetState.drinks));
-        localStorage.setItem("sales", resetState.sales.toFixed(2));
-        localStorage.setItem(
-          "totalDrinksSold",
-          resetState.totalDrinksSold.toString()
-        );
-      } catch (error) {
-        console.error("Error while updating local storage:", error);
-      }
-
-      return resetState;
-
     case "UPDATE_LOCAL_STORAGE":
-      try {
-        localStorage.setItem("drinks", JSON.stringify(state.drinks));
-        localStorage.setItem("sales", state.sales.toFixed(2));
-        localStorage.setItem(
-          "totalDrinksSold",
-          state.totalDrinksSold.toString()
-        );
-      } catch (error) {
-        console.error("Error while updating local storage:", error);
-      }
+      localStorage.setItem("drinks", JSON.stringify(state.drinks));
+      localStorage.setItem("sales", state.sales.toFixed(2));
+      localStorage.setItem("totalDrinksSold", state.totalDrinksSold.toString());
       return state;
 
     default:
@@ -141,40 +100,25 @@ const VendingMachineProvider = ({ children }) => {
       type: "UPDATE_SALES_INFO",
       payload: { sales, totalDrinksSold },
     });
-
-    try {
-      localStorage.setItem("drinks", JSON.stringify(state.drinks));
-      localStorage.setItem("sales", state.sales.toFixed(2));
-      localStorage.setItem("totalDrinksSold", state.totalDrinksSold.toString());
-    } catch (error) {
-      console.error("Error while updating local storage:", error);
-    }
   };
 
   useEffect(() => {
-    try {
-      const storedDrinks = JSON.parse(localStorage.getItem("drinks")) || [];
-      if (storedDrinks.length > 0) {
-        dispatch({ type: "SET_DRINKS", payload: storedDrinks });
-      }
+    const storedDrinks = JSON.parse(localStorage.getItem("drinks")) || [];
+    if (storedDrinks.length > 0) {
+      dispatch({ type: "SET_DRINKS", payload: storedDrinks });
+    }
 
-      const storedSales = parseFloat(localStorage.getItem("sales")) || 0;
-      const storedTotalDrinksSold =
-        parseInt(localStorage.getItem("totalDrinksSold")) || 0;
+    const storedSales = parseFloat(localStorage.getItem("sales")) || 0;
+    const storedTotalDrinksSold = parseInt(localStorage.getItem("totalDrinksSold")) || 0;
 
-      if (storedSales > 0 || storedTotalDrinksSold > 0) {
-        dispatch({
-          type: "UPDATE_SALES_INFO",
-          payload: {
-            sales: storedSales,
-            totalDrinksSold: storedTotalDrinksSold,
-          },
-        });
-      }
-    } catch (error) {
-      console.error("Error while retrieving data from local storage:", error);
+    if (storedSales > 0 || storedTotalDrinksSold > 0) {
+      dispatch({
+        type: "UPDATE_SALES_INFO",
+        payload: { sales: storedSales, totalDrinksSold: storedTotalDrinksSold },
+      });
     }
   }, []);
+
   useEffect(() => {
     if (state.drinks && state.drinks.length > 0) {
       try {
@@ -195,6 +139,16 @@ const VendingMachineProvider = ({ children }) => {
     } catch (error) {
       console.error("Error while updating local storage:", error);
     }
+  }, [state.drinks]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem("drinks", JSON.stringify(state.drinks));
+      localStorage.setItem("sales", state.sales.toFixed(2));
+      localStorage.setItem("totalDrinksSold", state.totalDrinksSold.toString());
+    } catch (error) {
+      console.error("Error while updating local storage:", error);
+    }
   }, [state]);
 
   return (
@@ -209,9 +163,7 @@ const VendingMachineProvider = ({ children }) => {
 const useVendingMachine = () => {
   const context = useContext(VendingMachineContext);
   if (!context) {
-    throw new Error(
-      "useVendingMachine must be used within a VendingMachineProvider"
-    );
+    throw new Error("useVendingMachine must be used within a VendingMachineProvider");
   }
   return context;
 };

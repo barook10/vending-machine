@@ -33,7 +33,7 @@ function Customer() {
     }
   };
 
-  const addMoney = (amount) => {
+  const addDenomination = (amount) => {
     setCurrentBalance(currentBalance + amount);
   };
 
@@ -46,10 +46,10 @@ function Customer() {
       <div className={styles['customer-info']}>
         <p className={styles['balance-text']}>Your Balance: RM {currentBalance.toFixed(2)}</p>
         <div className={styles['button-container']}>
-          <button onClick={() => addMoney(0.10)}>Add RM 0.10</button>
-          <button onClick={() => addMoney(0.20)}>Add RM 0.20</button>
-          <button onClick={() => addMoney(0.50)}>Add RM 0.50</button>
-          <button onClick={() => addMoney(1.00)}>Add RM 1.00</button>
+          <button onClick={() => addDenomination(0.10)}>Add RM 0.10</button>
+          <button onClick={() => addDenomination(0.20)}>Add RM 0.20</button>
+          <button onClick={() => addDenomination(0.50)}>Add RM 0.50</button>
+          <button onClick={() => addDenomination(1.00)}>Add RM 1.00</button>
         </div>
       </div>
       <div className={styles['customer-drink-list']}>
