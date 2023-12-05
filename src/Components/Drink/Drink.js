@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import styles from './Drink.module.css';
 
-const Drink = ({ drink, onBuy, onRefill, onChangePrice, onDeleteDrink, isCustomerView, isSalesView }) => {
+const Drink = ({ drink, onBuy, addQuantity, getNewPrice, deleteDrink, isCustomerView, isSalesView }) => {
   const { name, quantity, image } = drink;
 
   // State to manage the price
@@ -11,7 +11,7 @@ const Drink = ({ drink, onBuy, onRefill, onChangePrice, onDeleteDrink, isCustome
   // State to manage the new price input
   const [newPriceInput, setNewPriceInput] = useState('');
 
-  const handlePriceChange = (e) => {
+  const setNewPrice = (e) => {
     setNewPriceInput(e.target.value);
   };
 
@@ -19,7 +19,7 @@ const Drink = ({ drink, onBuy, onRefill, onChangePrice, onDeleteDrink, isCustome
     const newPrice = parseFloat(newPriceInput);
     if (!isNaN(newPrice)) {
       setPrice(newPrice);
-      onChangePrice(newPrice);
+      getNewPrice(newPrice);
       setNewPriceInput(''); 
     } else {
       // Handle invalid input (not a valid number)
@@ -44,7 +44,7 @@ const Drink = ({ drink, onBuy, onRefill, onChangePrice, onDeleteDrink, isCustome
       ) : (
         <div>
           {isSalesView ? null : (
-            <button onClick={() => onRefill(drink)}>Refill</button>
+            <button onClick={() => addQuantity(drink)}>Refill</button>
           )}
           {isSalesView ? null : (
             <div>
@@ -52,12 +52,12 @@ const Drink = ({ drink, onBuy, onRefill, onChangePrice, onDeleteDrink, isCustome
                 type="number"
                 placeholder="New Price"
                 value={newPriceInput}
-                onChange={handlePriceChange}
+                onChange={setNewPrice}
               />
               <button onClick={handlePriceSubmit}>Change Price</button>
               <br></br>
               <br></br>
-              <button onClick={onDeleteDrink}>Delete</button>
+              <button onClick={deleteDrink}>Delete</button>
             </div>
           )}
         </div>
