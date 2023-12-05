@@ -11,7 +11,7 @@ const Maintainer = () => {
 
   const { state, dispatch } = useVendingMachine();
 
-  const resetSales = () => {
+  const dispenseCash = () => {
     if (isPasswordCorrect) {
       dispatch({ type: 'RESET_SALES' });
     }
@@ -72,7 +72,7 @@ const Maintainer = () => {
           </ul>
 
           {/* Button to Collect all cash  */}
-          <button className={styles['collect-cash-button']} onClick={resetSales}>
+          <button className={styles['collect-cash-button']} onClick={dispenseCash}>
             Collect all cash
           </button>
           <p>Total Sales: RM {getDenomination().toFixed(2)}</p>

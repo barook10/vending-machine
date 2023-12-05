@@ -15,7 +15,7 @@ function MachineryControl() {
   const [newDrinkQuantity, setNewDrinkQuantity] = useState('');
   const [newDrinkImage, setNewDrinkImage] = useState('');
 
-  const onAddDrink = () => {
+  const addDrink = () => {
     if (isPasswordCorrect) {
       const newDrink = {
         name: newDrinkName,
@@ -33,19 +33,19 @@ function MachineryControl() {
     }
   };
 
-  const onDeleteDrink = (drink) => {
+  const deleteDrink = (drink) => {
     if (isPasswordCorrect) {
       dispatch({ type: 'DELETE_DRINK', payload: drink });
     }
   };
 
-  const onRefill = (drink) => {
+  const addQuantity = (drink) => {
     if (isPasswordCorrect) {
       dispatch({ type: 'REFILL_DRINK', payload: drink });
     }
   };
 
-  const onChangePrice = (drink, newPrice) => {
+  const getNewPrice = (drink, newPrice) => {
     if (isPasswordCorrect) {
       // Check if newPrice is a valid number
       if (!isNaN(newPrice) && newPrice >= 0) {
@@ -96,11 +96,11 @@ function MachineryControl() {
               <div key={drink.name}>
                 <Drink
                   drink={drink}
-                  onRefill={() => onRefill(drink)}
-                  onChangePrice={(newPrice) =>
-                    onChangePrice(drink, newPrice)
+                  addQuantity={() => addQuantity(drink)}
+                  getNewPrice={(newPrice) =>
+                    getNewPrice(drink, newPrice)
                   }
-                  onDeleteDrink={() => onDeleteDrink(drink)}
+                  deleteDrink={() => deleteDrink(drink)}
                 />
               </div>
             ))}
@@ -131,7 +131,7 @@ function MachineryControl() {
               value={newDrinkImage}
               onChange={(e) => setNewDrinkImage(e.target.value)}
             />
-            <button onClick={onAddDrink}>Add Drink</button>
+            <button onClick={addDrink}>Add Drink</button>
           </div>
         </div>
       )}
