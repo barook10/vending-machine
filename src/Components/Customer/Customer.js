@@ -143,7 +143,7 @@ class Customer extends Component {
             </p>
           ))}
         </div>
-        <CoinStorage/>
+        {/* <CoinStorage/> */}
       </div>
     );
   }
