@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './MachineryControl.module.css';
 import withVendingMachine from '../Context/VendingMachineWrapper';
-import Drink from '../Drink/Drink';
+import DrinkStorage from '../DrinkStorage/DrinkStorage';
 
 class MachineryControl extends Component {
   constructor(props) {
@@ -121,7 +121,7 @@ class MachineryControl extends Component {
             <div className={styles['drink-list']}>
               {state.drinks.map((drink) => (
                 <div key={drink.name}>
-                  <Drink
+                  <DrinkStorage
                     drink={drink}
                     addQuantity={() => this.addQuantity(drink)}
                     getNewPrice={(newPrice) => this.getNewPrice(drink, newPrice)}

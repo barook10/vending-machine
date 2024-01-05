@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import styles from './Maintainer.module.css';
 import CoinStorage from '../CoinStorage/CoinStorage';
 import withVendingMachine from '../Context/VendingMachineWrapper';
-import Drink from '../Drink/Drink';
+import DrinkStorage from '../DrinkStorage/DrinkStorage';
 
 class Maintainer extends Component {
   constructor(props) {
@@ -72,7 +72,7 @@ class Maintainer extends Component {
                 {state.drinks.map((drink) => (
                   <tr key={drink.name} className={styles['drink-stats']}>
                     <td>
-                      <Drink drink={drink} image={drink.image} isSalesView={true} />
+                      <DrinkStorage drink={drink} image={drink.image} isSalesView={true} />
                     </td>
                     {/* Additional sales information for each drink */}
                     <td>

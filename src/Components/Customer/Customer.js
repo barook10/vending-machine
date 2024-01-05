@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './Customer.module.css';
-import CoinStorage from '../CoinStorage/CoinStorage';
 import withVendingMachine from '../Context/VendingMachineWrapper';
 
 class Customer extends Component {

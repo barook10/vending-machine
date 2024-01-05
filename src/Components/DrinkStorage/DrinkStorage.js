@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styles from './Drink.module.css';
 
-class Drink extends Component {
+class DrinkStorage extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -67,4 +67,4 @@ class Drink extends Component {
   }
 }
 
-export default Drink;
+export default DrinkStorage;
