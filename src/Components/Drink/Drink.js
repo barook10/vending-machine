@@ -1,69 +1,70 @@
-
-import React, { useState } from 'react';
+import React, { Component } from 'react';
 import styles from './Drink.module.css';
 
-const Drink = ({ drink, onBuy, addQuantity, getNewPrice, deleteDrink, isCustomerView, isSalesView }) => {
-  const { name, quantity, image } = drink;
+class Drink extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      price: this.props.drink.price,
+      newPriceInput: '',
+    };
+  }
 
-  // State to manage the price
-  const [price, setPrice] = useState(drink.price);
-
-  // State to manage the new price input
-  const [newPriceInput, setNewPriceInput] = useState('');
-
-  const setNewPrice = (e) => {
-    setNewPriceInput(e.target.value);
+  setNewPrice = (e) => {
+    this.setState({ newPriceInput: e.target.value });
   };
 
-  const handlePriceSubmit = () => {
-    const newPrice = parseFloat(newPriceInput);
+  handlePriceSubmit = () => {
+    const newPrice = parseFloat(this.state.newPriceInput);
     if (!isNaN(newPrice)) {
-      setPrice(newPrice);
-      getNewPrice(newPrice);
-      setNewPriceInput(''); 
+      this.setState({ price: newPrice, newPriceInput: '' });
+      this.props.getNewPrice(newPrice);
     } else {
-      // Handle invalid input (not a valid number)
       alert('Please enter a valid number for the new price.');
     }
   };
 
-  const formattedPrice = typeof price === 'number' && isFinite(price)
-    ? `RM ${price.toFixed(2)}`
-    : 'Price: N/A';
+  render() {
+    const { name, quantity, image } = this.props.drink;
+    const { price, newPriceInput } = this.state;
+    const { onBuy, addQuantity, deleteDrink, isCustomerView, isSalesView } = this.props;
 
-  return (
-    <div  className={styles['drink-box']}>
-      <img src={image} alt={name} style={{ width: '100px', height: '100px' }} />
-      <h3>{name}</h3>
-      <p>{formattedPrice}</p>
+    const formattedPrice =
+      typeof price === 'number' && isFinite(price) ? `RM ${price.toFixed(2)}` : 'Price: N/A';
 
-      {isSalesView ? null : (<p>Quantity: {quantity}</p> )}
+    return (
+      <div className={styles['drink-box']}>
+        <img src={image} alt={name} style={{ width: '100px', height: '100px' }} />
+        <h3>{name}</h3>
+        <p>{formattedPrice}</p>
 
-      {isCustomerView ? (
-        <button  onClick={onBuy}>Buy</button>
-      ) : (
-        <div>
-          {isSalesView ? null : (
-            <button onClick={() => addQuantity(drink)}>Refill</button>
-          )}
-          {isSalesView ? null : (
-            <div>
-              <input  className={styles['drink-input']}
-                type="number"
-                placeholder="New Price"
-                value={newPriceInput}
-                onChange={setNewPrice}
-              />
-              <button onClick={handlePriceSubmit}>Change Price</button>
-              <br></br>
-              <br></br>
-              <button onClick={deleteDrink}>Delete</button>
-            </div>
-          )}
-        </div>
-      )}
-    </div>
-  );
-};
+        {isSalesView ? null : <p>Quantity: {quantity}</p>}
+
+        {isCustomerView ? (
+          <button onClick={onBuy}>Buy</button>
+        ) : (
+          <div>
+            {isSalesView ? null : <button onClick={() => addQuantity(this.props.drink)}>Refill</button>}
+            {isSalesView ? null : (
+              <div>
+                <input
+                  className={styles['drink-input']}
+                  type="number"
+                  placeholder="New Price"
+                  value={newPriceInput}
+                  onChange={this.setNewPrice}
+                />
+                <button onClick={this.handlePriceSubmit}>Change Price</button>
+                <br />
+                <br />
+                <button onClick={() => deleteDrink(this.props.drink)}>Delete</button>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    );
+  }
+}
 
 export default Drink;

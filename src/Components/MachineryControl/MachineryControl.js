@@ -1,21 +1,27 @@
-import React, { useState } from 'react';
-import Drink from '../Drink/Drink';
+import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { useVendingMachine } from '../Context/VendingMachineContext';
 import styles from './MachineryControl.module.css';
+import withVendingMachine from '../Context/VendingMachineWrapper';
+import Drink from '../Drink/Drink';
 
-function MachineryControl() {
-  const hardcodedPassword = 'admin';
-  const [password, setPassword] = useState('');
-  const [isPasswordCorrect, setIsPasswordCorrect] = useState(false);
-  const [invalidPasswordAttempt, setInvalidPasswordAttempt] = useState(false);
-  const { state, dispatch } = useVendingMachine();
-  const [newDrinkName, setNewDrinkName] = useState('');
-  const [newDrinkPrice, setNewDrinkPrice] = useState('');
-  const [newDrinkQuantity, setNewDrinkQuantity] = useState('');
-  const [newDrinkImage, setNewDrinkImage] = useState('');
+class MachineryControl extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      password: '',
+      isPasswordCorrect: false,
+      invalidPasswordAttempt: false,
+      newDrinkName: '',
+      newDrinkPrice: '',
+      newDrinkQuantity: '',
+      newDrinkImage: '',
+    };
+  }
 
-  const addDrink = () => {
+  addDrink = () => {
+    const { isPasswordCorrect, newDrinkName, newDrinkPrice, newDrinkQuantity, newDrinkImage } = this.state;
+    const { dispatch } = this.props.vendingMachineContext;
+
     if (isPasswordCorrect) {
       const newDrink = {
         name: newDrinkName,
@@ -26,117 +32,137 @@ function MachineryControl() {
 
       dispatch({ type: 'ADD_DRINK', payload: newDrink });
 
-      setNewDrinkName('');
-      setNewDrinkPrice('');
-      setNewDrinkQuantity('');
-      setNewDrinkImage('');
+      this.setState({
+        newDrinkName: '',
+        newDrinkPrice: '',
+        newDrinkQuantity: '',
+        newDrinkImage: '',
+      });
     }
   };
 
-  const deleteDrink = (drink) => {
+  deleteDrink = (drink) => {
+    const { isPasswordCorrect } = this.state;
+    const { dispatch } = this.props.vendingMachineContext;
+
     if (isPasswordCorrect) {
       dispatch({ type: 'DELETE_DRINK', payload: drink });
     }
   };
 
-  const addQuantity = (drink) => {
+  addQuantity = (drink) => {
+    const { isPasswordCorrect } = this.state;
+    const { dispatch } = this.props.vendingMachineContext;
+
     if (isPasswordCorrect) {
       dispatch({ type: 'REFILL_DRINK', payload: drink });
     }
   };
 
-  const getNewPrice = (drink, newPrice) => {
+  getNewPrice = (drink, newPrice) => {
+    const { isPasswordCorrect } = this.state;
+    const { dispatch } = this.props.vendingMachineContext;
+
     if (isPasswordCorrect) {
-      // Check if newPrice is a valid number
       if (!isNaN(newPrice) && newPrice >= 0) {
-        // Dispatch the 'CHANGE_PRICE' action with the correct payload
         dispatch({ type: 'CHANGE_PRICE', payload: { drink, newPrice } });
       } else {
-        
         alert('Invalid new price:', newPrice);
       }
     }
   };
 
-  return (
-    <div className={styles['machinery-control-panel']}>
-      <h2>Machinery Control Panel</h2>
-      {!isPasswordCorrect ? (
-        <div className={styles['input-container']}>
-          <p>Enter password to access the Machinery Control panel:</p>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <button
-            onClick={() => {
-              if (password === hardcodedPassword) {
-                setIsPasswordCorrect(true);
-                setInvalidPasswordAttempt(false);
-              } else {
-                setInvalidPasswordAttempt(true);
-              }
-            }}
-          >
-            Submit
-          </button>
-          {invalidPasswordAttempt && (
-            <p className={styles['error-message']}>Invalid password. Please try again.</p>
-          )}
-        </div>
-      ) : (
-        <div>
-          <Link to="/">
-            <button className={styles.btn}>End Simulation</button>
-            <button className={styles.btn1}>Lock</button>
-          </Link>
-          <div className={styles['drink-list']}>
-            {state.drinks.map((drink) => (
-              <div key={drink.name}>
-                <Drink
-                  drink={drink}
-                  addQuantity={() => addQuantity(drink)}
-                  getNewPrice={(newPrice) =>
-                    getNewPrice(drink, newPrice)
-                  }
-                  deleteDrink={() => deleteDrink(drink)}
-                />
-              </div>
-            ))}
-          </div>
+  render() {
+    const {
+      password,
+      isPasswordCorrect,
+      invalidPasswordAttempt,
+      newDrinkName,
+      newDrinkPrice,
+      newDrinkQuantity,
+      newDrinkImage,
+    } = this.state;
+    const { state } = this.props.vendingMachineContext;
+
+    return (
+      <div className={styles['machinery-control-panel']}>
+        {!isPasswordCorrect ? (
           <div className={styles['input-container']}>
-            <h3>Add New Drink</h3>
+            <p>Enter password to access the Machinery Control panel:</p>
             <input
-              type="text"
-              placeholder="Drink Name"
-              value={newDrinkName}
-              onChange={(e) => setNewDrinkName(e.target.value)}
+              type="password"
+              value={password}
+              onChange={(e) => this.setState({ password: e.target.value })}
             />
-            <input
-              type="number"
-              placeholder="Price"
-              value={newDrinkPrice}
-              onChange={(e) => setNewDrinkPrice(e.target.value)}
-            />
-            <input
-              type="number"
-              placeholder="Quantity"
-              value={newDrinkQuantity}
-              onChange={(e) => setNewDrinkQuantity(e.target.value)}
-            />
-            <input
-              type="text"
-              placeholder="Image URL"
-              value={newDrinkImage}
-              onChange={(e) => setNewDrinkImage(e.target.value)}
-            />
-            <button onClick={addDrink}>Add Drink</button>
+            <button
+              onClick={() => {
+                if (password === 'admin') {
+                  this.setState({
+                    isPasswordCorrect: true,
+                    invalidPasswordAttempt: false,
+                  });
+                } else {
+                  this.setState({ invalidPasswordAttempt: true });
+                }
+              }}
+            >
+              Submit
+            </button>
+            {invalidPasswordAttempt && (
+              <p className={styles['error-message']}>Invalid password. Please try again.</p>
+            )}
           </div>
-        </div>
-      )}
-    </div>
-  );
+        ) : (
+          <div>
+            <Link to="/">
+              <button className={styles.btn}>End Simulation</button>
+              <button className={styles.btn1}>Lock</button>
+            </Link>
+            <div className={styles['drink-list']}>
+              {state.drinks.map((drink) => (
+                <div key={drink.name}>
+                  <Drink
+                    drink={drink}
+                    addQuantity={() => this.addQuantity(drink)}
+                    getNewPrice={(newPrice) => this.getNewPrice(drink, newPrice)}
+                    deleteDrink={() => this.deleteDrink(drink)}
+                  />
+                </div>
+              ))}
+            </div>
+            <div className={styles['input-container']}>
+              <h3>Add New Drink</h3>
+              <input
+                type="text"
+                placeholder="Drink Name"
+                value={newDrinkName}
+                onChange={(e) => this.setState({ newDrinkName: e.target.value })}
+              />
+              <input
+                type="number"
+                placeholder="Price"
+                value={newDrinkPrice}
+                onChange={(e) => this.setState({ newDrinkPrice: e.target.value })}
+              />
+              <input
+                type="number"
+                placeholder="Quantity"
+                value={newDrinkQuantity}
+                onChange={(e) => this.setState({ newDrinkQuantity: e.target.value })}
+              />
+              <input
+                type="text"
+                placeholder="Image URL"
+                value={newDrinkImage}
+                onChange={(e) => this.setState({ newDrinkImage: e.target.value })}
+              />
+              <button onClick={this.addDrink}>Add Drink</button>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
 }
 
-export default MachineryControl;
+export default withVendingMachine(MachineryControl);

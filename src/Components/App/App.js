@@ -7,16 +7,18 @@ import Maintainer from '../Maintainer/Maintainer';
 import SimulatorControlPanel from '../SimulatorControlPanel/SimulatorControlPanel';
 import { VendingMachineProvider } from '../Context/VendingMachineContext';
 
+
 const App = () => {
   return (
     <VendingMachineProvider>
-      <div>
+      <div className="app-container">
         <Router>
           <Routes>
             <Route path='/' element={<SimulatorControlPanel />} />
             <Route path="/customer" element={<Customer />} />
             <Route path="/MachineryControl" element={<MachineryControl />} />
             <Route path="/Maintainer" element={<Maintainer />} />
+            
           </Routes>
         </Router>
       </div>

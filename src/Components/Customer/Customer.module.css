@@ -1,9 +1,13 @@
 
+
 .customer-panel {
   background-color: #f0f0f0;
   padding: 20px;
   border-radius: 10px;
-  margin-bottom: 20px;
+  margin: 20px;
+  height: 100%; 
+  display: flex;
+  flex-direction: column;
 }
 
 .customer-info {
@@ -16,18 +20,18 @@
 
 .button-container {
   display: flex;
-  flex-wrap: wrap; 
+  flex-wrap: wrap;
   gap: 10px;
 }
 
 .button-container button {
-  flex: 1; 
-  border-radius: 20px;
-  margin: 10px; 
-  padding: 20px;
-  box-shadow: 25px 11px 25px 9px rgba(0, 0, 0, 0.45);
-  -webkit-box-shadow: 25px 11px 25px 9px rgba(0, 0, 0, 0.45);
-  -moz-box-shadow: 25px 11px 25px 9px rgba(0, 0, 0, 0.45);
+  flex: 1;
+  border-radius: 10px;
+  margin: 10px;
+  padding: 15px;
+  box-shadow: 15px 6px 15px 4px rgba(0, 0, 0, 0.45);
+  -webkit-box-shadow: 15px 6px 15px 4px rgba(0, 0, 0, 0.45);
+  -moz-box-shadow: 15px 6px 15px 4px rgba(0, 0, 0, 0.45);
 }
 
 .button-container button:hover {
@@ -38,13 +42,41 @@
   transition: ease-in-out;
 }
 
-.customer-drink-list {
-  display: flex; 
-  flex-wrap: wrap; 
-  align-items: content;
-  justify-content: center;
+.drink-table {
+  width: 60%;
+  margin: 20px auto;
+  border-collapse: collapse;
+  flex-grow: 1; /* Make the table fill the available vertical space */
 }
 
-.customer-drink-list.customer-drink-box {
-  margin: 10px;
+.drink-table th,
+.drink-table td {
+  border: 1px solid #ddd;
+  padding: 2px;
+  text-align: left;
+  font-size: 12px;
+}
+
+.drink-table th {
+  background-color: #f2f2f2;
+}
+
+.drink-table img {
+  max-width: 30px;
+  max-height: 30px;
+}
+
+.checkbox-container {
+  align-items: center;
+}
+
+.checkbox-container input {
+  margin: 0px;
+  border-radius: 5px;
+  border: 2px solid #555;
+}
+
+.message {
+  margin-top: 10px;
+  color: #ff0000;
 }
