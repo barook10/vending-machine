@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './SimulatorControlPanel.module.css';
 
-const SimulatorControlPanel = () => {
+class SimulatorControlPanel extends Component {
+  
+
+  render(){
+  
   return (
     <div className={styles['simulator-control-panel']}>
       <h2>SIMULATOR CONTROL PANEL</h2>
@@ -15,5 +19,6 @@ const SimulatorControlPanel = () => {
     </div>
   );
 };
+}
 
 export default SimulatorControlPanel;

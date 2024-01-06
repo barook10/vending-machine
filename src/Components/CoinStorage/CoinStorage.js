@@ -1,10 +1,14 @@
-import React from 'react';
-import { useVendingMachine } from '../Context/VendingMachineContext';
+import React, { Component } from 'react';
+import withVendingMachine from '../Context/VendingMachineWrapper';
 import styles from './CoinStorage.module.css';
 
-const CoinStorage = () => {
-  const { state } = useVendingMachine();
+class CoinStorage extends Component {
+   
+  render(){
 
+    const { state } = this.props.vendingMachineContext
+
+  
   return (
     <div className={styles['coin-storage-container']}>
       <h2>Coin Storage</h2>
@@ -27,5 +31,6 @@ const CoinStorage = () => {
     </div>
   );
 }
+}
 
-export default CoinStorage;
+export default withVendingMachine (CoinStorage);
